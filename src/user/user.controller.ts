@@ -13,11 +13,11 @@ import {
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user-dto';
 import { UserService } from './user.service';
-import { LogInterceptor } from 'src/interceptors/log.interceptors';
-import { Roles } from 'src/decorators/role.decorates';
-import { Role } from 'src/enums/role.enum';
-import { RoleGuard } from 'src/guards/role.guard';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { Roles } from '../decorators/role.decorates';
+import { Role } from '../enums/role.enum';
+import { AuthGuard } from '../guards/auth.guard';
+import { RoleGuard } from '../guards/role.guard';
+import { LogInterceptor } from '../interceptors/log.interceptors';
 
 @Roles(Role.Admin)
 @UseGuards(AuthGuard, RoleGuard)

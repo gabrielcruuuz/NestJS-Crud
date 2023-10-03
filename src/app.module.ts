@@ -8,10 +8,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from './user/entity/user.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: process.env.ENV === 'test' ? '.env.test' : '.env',
+    }),
     //limit number os requests in the app
     ThrottlerModule.forRoot({
       ttl: 60,
@@ -19,6 +23,16 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
     }),
     forwardRef(() => UserModule),
     forwardRef(() => AuthModule),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      entities: [UserEntity],
+      synchronize: process.env.ENV === 'dev',
+    }),
 
     MailerModule.forRoot({
       transport: {

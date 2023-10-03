@@ -11,7 +11,7 @@ export class LogInterceptor implements NestInterceptor {
 
         console.log(`URL: ${request.url}`);
         console.log(`Execution time : ${Date.now() - dt} milliseconds`);
-      }),
+      })
     );
   }
 }

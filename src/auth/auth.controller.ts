@@ -14,17 +14,16 @@ import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { ForgetDTO } from './dto/forget.dto';
 import { ResetDTO } from './dto/reset.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { User } from 'src/decorators/user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileService } from 'src/file/file.service';
-import { join } from 'path';
+import { FileService } from '../file/file.service';
+import { AuthGuard } from '../guards/auth.guard';
+import { User } from '../decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly fileService: FileService,
+    private readonly fileService: FileService
   ) {}
 
   @Post('login')
@@ -58,13 +57,13 @@ export class AuthController {
           new FileTypeValidator({ fileType: 'image/*' }),
           new MaxFileSizeValidator({ maxSize: 1024 * 100 }),
         ],
-      }),
+      })
     )
-    photo: Express.Multer.File,
+    photo: Express.Multer.File
   ) {
-    const path = join(__dirname, '..', '..', 'storage', `photo-${user.id}.png`);
+    const filename = `photo-${user.id}.png`;
 
-    await this.fileService.upload(photo, path);
+    await this.fileService.upload(photo, filename);
 
     return { success: true };
   }
